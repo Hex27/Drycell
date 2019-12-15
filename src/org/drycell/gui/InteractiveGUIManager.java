@@ -22,10 +22,10 @@ public class InteractiveGUIManager implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onInventoryClick(InventoryClickEvent event){
 		Player p = (Player) event.getWhoClicked();
-		if(event.getClick() != ClickType.LEFT) return;
 		if(event.getCurrentItem() == null) return;
 		if(!guis.containsKey(p.getUniqueId())) return;
 		event.setCancelled(true);
+		if(event.getClick() != ClickType.LEFT) return;
 		if(guis.get(p.getUniqueId()).getAction(event.getSlot()) == null) return;
 		if(event.getClickedInventory().getType() != InventoryType.CHEST) return;
 		guis.get(p.getUniqueId()).getAction(event.getSlot()).run();
