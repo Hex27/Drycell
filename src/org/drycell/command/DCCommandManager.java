@@ -94,6 +94,7 @@ public class DCCommandManager implements CommandExecutor{
 					return true;
 				}catch(InvalidArgumentException e){
 					sender.sendMessage(ChatColor.RED + e.getProblem());
+					return false;
 				}
 			}
 		}

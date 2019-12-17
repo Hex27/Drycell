@@ -54,7 +54,9 @@ public abstract class DCCommand {
 			String arg = args.pop();
 			DCArgument parser = parameters.get(i);
 			Object parsed = parser.parse(sender, arg);
-			if(parsed == null) throw new InvalidArgumentException(parser.validate(sender,arg));
+			String val = parser.validate(sender, arg);
+			if(parsed == null) throw new InvalidArgumentException(val);
+			if(!val.equals("")) throw new InvalidArgumentException(val);
 			items.add(i, parsed);
 			i++;
 		}
