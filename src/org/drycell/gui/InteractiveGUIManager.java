@@ -34,5 +34,6 @@ public class InteractiveGUIManager implements Listener {
 	@EventHandler
 	public void onInventoryClose(InventoryCloseEvent event){
 		guis.remove(event.getPlayer().getUniqueId());
+		PagedGUI.guis.remove(event.getPlayer().getUniqueId());
 	}
 }
