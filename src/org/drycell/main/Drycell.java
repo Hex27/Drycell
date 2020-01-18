@@ -9,15 +9,17 @@ import com.google.gson.Gson;
 public class Drycell extends JavaPlugin {
 	
 	private static Drycell i;
-	private Gson gson;
+	private static Gson gson;
 	
 	public void onEnable(){
+		Bukkit.getLogger().info("Drycell has initiated!");
 		i = this;
-		this.gson = new Gson();
+		getGson();
 		Bukkit.getPluginManager().registerEvents(new InteractiveGUIManager(), this);
 	}
 	
-	public Gson getGson(){
+	public static Gson getGson(){
+		if(gson == null) gson = new Gson();
 		return gson;
 	}
 	

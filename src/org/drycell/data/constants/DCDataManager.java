@@ -204,12 +204,12 @@ public abstract class DCDataManager<T extends DCData> {
 	public abstract String getSaveFolderPath();
 	
 	public String serialise(T data){
-		return Drycell.get().getGson().toJson(data);
+		return Drycell.getGson().toJson(data);
 	}
 	
 	public T deserialise(String json){
 		if(json == null) return null;
-		return Drycell.get().getGson().fromJson(json, type);
+		return Drycell.getGson().fromJson(json, type);
 	}
 
 }

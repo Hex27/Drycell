@@ -1,6 +1,6 @@
 name: Drycell
 author: Hex_27
-version: 1.0.3
+version: 1.0.4
 description: General Library
 main: org.drycell.main.Drycell
 api-version: 1.14
