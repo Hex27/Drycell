@@ -1,6 +1,7 @@
 package org.drycell.logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DCLogger {
@@ -25,15 +26,15 @@ public class DCLogger {
 	}
 	
 	public void info(String message){
-		Bukkit.getConsoleSender().sendMessage(tag + message);
+		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', tag + message));
 	}
 	
 	public void error(String message){
-		Bukkit.getConsoleSender().sendMessage(error + message);
+		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', error + message));
 	}
 
 	public void debug(String message){
-		Bukkit.getConsoleSender().sendMessage(debug + message);
+		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', debug + message));
 	}
 
 	/**

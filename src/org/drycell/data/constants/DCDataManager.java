@@ -1,12 +1,16 @@
 package org.drycell.data.constants;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -15,6 +19,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.drycell.main.Drycell;
@@ -22,7 +27,6 @@ import org.drycell.main.DrycellPlugin;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 
-import com.google.common.io.Files;
 import com.google.gson.Gson;
 
 public abstract class DCDataManager<T extends DCData> {
@@ -134,7 +138,9 @@ public abstract class DCDataManager<T extends DCData> {
 			cache.get(id).resetAccess();
 			return cache.get(id);
 		}
+		//Bukkit.getLogger().info("Sync get or load called, cache empty.");
 		T data = loadOrCreate(id);
+		//Bukkit.getLogger().info("loadOrCreate finished.");
 		if(data != null)
 			cache.put(id,data);
 		return data;
@@ -160,20 +166,29 @@ public abstract class DCDataManager<T extends DCData> {
 	}
 	
 	public T loadOrCreate(UUID id){
-		try (FileReader reader = new FileReader(getSaveFolderPath() + id + ".json"))
+		try
         {
-            //Read JSON file
-			String json = "";
-			int i;
-			while ((i=reader.read()) != -1){
-				json += (char) i;
+			if(!new File(getSaveFolderPath() + id + ".json").exists()){
+				return createNewData(id);
 			}
+			//FileReader fr = new FileReader(getSaveFolderPath() + id + ".json");
+			//BufferedReader reader =new BufferedReader(fr);
+            //Read JSON file
+			//Bukkit.getLogger().info("Attempting file read...");
+			String json = new String(Files.readAllBytes(Paths.get(getSaveFolderPath() + id + ".json"))); ;
+//			int i;
+//			while ((i=reader.read()) != -1){
+//				json += (char) i;
+//			}
+//    		reader.close();
+			//Bukkit.getLogger().info("Beginning deserialisation");
             T item = deserialise(json);
+    		//Bukkit.getLogger().info("Done!");
             return item;
         } catch (FileNotFoundException e) {
         	//User does not exist.
     		return createNewData(id);
-        } catch (IOException e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
 		return null;
@@ -191,6 +206,18 @@ public abstract class DCDataManager<T extends DCData> {
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
+		} catch (Throwable e){
+			e.printStackTrace();
+		}
+	}
+	
+	public void delete(UUID item){
+		try{
+			cache.remove(item);
+			if(item == null) return;
+			File file = new File(getSaveFolderPath() + item.toString() + ".json");
+			if(file.exists())
+				file.delete();
 		} catch (Throwable e){
 			e.printStackTrace();
 		}
