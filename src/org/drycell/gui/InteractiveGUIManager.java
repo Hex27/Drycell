@@ -24,6 +24,7 @@ public class InteractiveGUIManager implements Listener {
 		Player p = (Player) event.getWhoClicked();
 		if(event.getCurrentItem() == null) return;
 		if(!guis.containsKey(p.getUniqueId())) return;
+		
 		event.setCancelled(true);
 		if(event.getClick() != ClickType.LEFT) return;
 		if(guis.get(p.getUniqueId()).getAction(event.getSlot()) == null) return;
