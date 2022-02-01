@@ -60,21 +60,18 @@ public class DCHelpCommand extends DCCommand {
 		sender.sendMessage(ChatColor.GOLD + "============[" + ChatColor.AQUA + plugin.getName() + ChatColor.GOLD + "][" + ChatColor.YELLOW + "Pg. " + (page + 1) + ChatColor.GOLD +
                 "]============");
 		sender.sendMessage("");
-        boolean maxhit = false;
         for (int i = 0; i < 6; i++) {
             if (cmds.size() > page * 5 + i) {
                 DCCommand cmd = cmds.get(page * 5 + i);
                 String subCmd = ChatColor.YELLOW + "/" + base + " " + String.join("/", cmd.aliases);
 				String params = " ";
-				for(DCArgument param:cmd.parameters){
+				for(DCArgument<?> param:cmd.parameters){
 					if(param.isOptional()){
 						params += ChatColor.GRAY + "<" + param.getName() + "> ";
 					}else
 						params += ChatColor.AQUA + "[" + param.getName() + "] ";
 				}
 				sender.sendMessage(subCmd + params + ChatColor.DARK_GRAY + "- " + ChatColor.YELLOW + plugin.getLang().fetchLang(cmd.getLangPath()));
-            } else {
-                maxhit = true;
             }
         }
 		sender.sendMessage("");

@@ -1,5 +1,7 @@
 package org.drycell.command;
 
+import java.util.ArrayList;
+
 import org.bukkit.command.CommandSender;
 
 public abstract class DCArgument<T> {
@@ -45,5 +47,13 @@ public abstract class DCArgument<T> {
 	public void setOptional(boolean isOptional) {
 		this.isOptional = isOptional;
 	}
+
+    /**
+     * Should return a list of valid parameters
+     * to show when tab completing the command
+     */
+	public ArrayList<String> getTabOptions(String[] args) {
+	    return new ArrayList<>();
+    }
 
 }

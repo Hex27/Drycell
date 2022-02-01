@@ -9,7 +9,7 @@ import org.drycell.main.DrycellPlugin;
 public abstract class DCCommand {
 	
 	public ArrayList<String> aliases = new ArrayList<>();
-	public ArrayList<DCArgument> parameters = new ArrayList<DCArgument>();
+	public ArrayList<DCArgument<?>> parameters = new ArrayList<DCArgument<?>>();
 	public DrycellPlugin plugin;
 	public DCCommand(DrycellPlugin plugin, String... aliases){
 		this.plugin = plugin;
@@ -24,7 +24,7 @@ public abstract class DCCommand {
 		if(args.size() > this.parameters.size()) return false;
 		if(this.parameters.size() == 0) return true;
 		int lowerBound = 0;
-		for(DCArgument arg:parameters){
+		for(DCArgument<?> arg:parameters){
 			if(!arg.isOptional()) lowerBound++;
 		}
 		return args.size() >= lowerBound;
@@ -52,7 +52,7 @@ public abstract class DCCommand {
 		int i = 0;
 		while(args.size() > 0){
 			String arg = args.pop();
-			DCArgument parser = parameters.get(i);
+			DCArgument<?> parser = parameters.get(i);
 			Object parsed = parser.parse(sender, arg);
 			String val = parser.validate(sender, arg);
 			if(parsed == null) throw new InvalidArgumentException(val);
@@ -72,5 +72,6 @@ public abstract class DCCommand {
 		command = command.toLowerCase();
 		return aliases.contains(command);
 	}
+	
 
 }

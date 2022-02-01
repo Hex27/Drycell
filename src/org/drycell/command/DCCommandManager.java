@@ -2,18 +2,17 @@ package org.drycell.command;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Stack;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.drycell.main.DrycellPlugin;
 
-public class DCCommandManager implements CommandExecutor{
+public class DCCommandManager implements TabExecutor{
 	
 	private ArrayList<DCCommand> commands = new ArrayList<>();
 
@@ -29,7 +28,7 @@ public class DCCommandManager implements CommandExecutor{
 		registerCommand(new DCHelpCommand(plugin,this,"help","h","?"));
 	}
 	
-	public void unregisterCommand(Class clazz){
+	public void unregisterCommand(Class<?> clazz){
 		Iterator<DCCommand> it = commands.iterator();
 		while(it.hasNext()){
 			DCCommand cmd = it.next();
@@ -101,6 +100,38 @@ public class DCCommandManager implements CommandExecutor{
 		sender.sendMessage(plugin.getLang().fetchLang("command.unknown"));
 		return false;
 	}
+	
+    @Override
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String alias, String[] args) {
+	    List<String> options = new ArrayList<>();
+        if (args.length == 0) {
+            for (DCCommand dcCommand : commands) {
+                if (dcCommand.hasPermission(commandSender))
+                    options.add(dcCommand.aliases.get(0));
+            }
+        }else if(args.length == 1) {
+            for (DCCommand dcCommand : commands) {
+                if (dcCommand.hasPermission(commandSender))
+                	for(String a:dcCommand.aliases) {
+                		if(a.startsWith(args[0].toLowerCase())) {
+                			options.add(dcCommand.aliases.get(0));
+                			break;
+                		}
+                	}
+            }
+        }else {
+            for (DCCommand dcCommand : commands) {
+                if (dcCommand.matchCommand(args[0].toLowerCase())) {
+                    for (DCArgument<?> arg : dcCommand.parameters) {
+                        options.addAll(arg.getTabOptions(args));
+                    }
+                    break;
+                }
+            }
+        }
+
+        return options;
+    }
 	
 
 }

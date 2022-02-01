@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.drycell.main.Drycell;
 import org.drycell.main.DrycellPlugin;
 
 public class DCConfig {
@@ -72,6 +69,7 @@ public class DCConfig {
 		return (Double) configOptions.get(key);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<String> getStringList(String key){
 		return (List<String>) configOptions.get(key);
 	}
